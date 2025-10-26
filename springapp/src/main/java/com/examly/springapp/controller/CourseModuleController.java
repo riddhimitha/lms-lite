@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin(origins = {"http://localhost:8081", "${cors.allowed-origins:*}"}
+@CrossOrigin(origins = {"http://localhost:8081", "${cors.allowed-origins:*}"})
 public class CourseModuleController {
 
     @Autowired
