@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080/api/courses';
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api/courses';
 
 export const fetchCourses = async () => {
   const response = await fetch(BASE_URL);
