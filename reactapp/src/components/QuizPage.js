@@ -14,26 +14,21 @@ function QuizPage() {
   const loadQuiz = async () => {
     try {
       const quizData = await getQuiz(id);
-      setQuestions(quizData || []);
+      if (quizData && typeof quizData === 'string') {
+        const questionArray = quizData.split('\n').filter(q => q.includes('*'));
+        setQuestions(questionArray);
+      }
     } catch (error) {
       console.error('Error loading quiz:', error);
     }
   };
 
   const handleSubmit = async () => {
-    let score = 0;
-    questions.forEach((q, index) => {
-      const [question, correctAnswer] = q.split('*');
-      if (answers[index] && answers[index].toLowerCase() === correctAnswer.toLowerCase()) {
-        score++;
-      }
-    });
-    
-    const percentage = Math.round((score / questions.length) * 100);
+    const answerString = Object.values(answers).join(',');
     
     try {
-      await submitQuiz(id, 'john_doe', percentage);
-      alert(`Quiz submitted! Score: ${score}/${questions.length} (${percentage}%)`);
+      const result = await submitQuiz(id, answerString);
+      alert(`Quiz completed! ${result}`);
     } catch (error) {
       alert('Error submitting quiz');
     }

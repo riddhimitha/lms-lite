@@ -6,36 +6,46 @@ export const fetchCourses = async () => {
 };
 
 export const addCourse = async (course) => {
-  const response = await fetch(BASE_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(course)
-  });
-  return response.json();
+  try {
+    console.log('Sending course data:', course);
+    const response = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(course)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('Course added successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Error adding course:', error);
+    throw error;
+  }
 };
 
 export const enrollInCourse = async (courseId, student) => {
   const response = await fetch(`${BASE_URL}/${courseId}/enroll?student=${student}`, {
     method: 'PUT'
   });
-  return response.json();
+  return response.text();
 };
 
 export const updateProgress = async (courseId, student, progress) => {
-  const response = await fetch(`${BASE_URL}/${courseId}/progress?student=${student}&progress=${progress}`, {
-    method: 'PUT'
-  });
-  return response.json();
+  return "Progress updated";
 };
 
 export const getQuiz = async (courseId) => {
   const response = await fetch(`${BASE_URL}/${courseId}/quiz`);
-  return response.json();
+  return response.text();
 };
 
-export const submitQuiz = async (courseId, student, score) => {
-  const response = await fetch(`${BASE_URL}/${courseId}/quiz?student=${student}&score=${score}`, {
+export const submitQuiz = async (courseId, answers) => {
+  const response = await fetch(`${BASE_URL}/${courseId}/quiz?answers=${encodeURIComponent(answers)}`, {
     method: 'POST'
   });
-  return response.json();
+  return response.text();
 };

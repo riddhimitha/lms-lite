@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Courses - LMS Lite</title>
+</head>
+<body>
+    <h1>All Courses</h1>
+    <div th:if="${#lists.isEmpty(courses)}">
+        <p>No courses available.</p>
+    </div>
+    <div th:unless="${#lists.isEmpty(courses)}">
+        <div th:each="course : ${courses}">
+            <h3 th:text="${course.name}"></h3>
+            <p th:text="${course.description}"></p>
+            <hr>
+        </div>
+    </div>
+    <a href="/add-course">Add New Course</a>
+</body>
+</html>

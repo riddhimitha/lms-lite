@@ -13,16 +13,17 @@ function CourseList() {
   const loadCourses = async () => {
     try {
       const data = await fetchCourses();
-      setCourses(data);
+      setCourses(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error loading courses:', error);
+      setCourses([]);
     }
   };
 
   const handleEnroll = async (courseId) => {
     try {
-      await enrollInCourse(courseId, 'john_doe');
-      alert('Enrolled successfully!');
+      const result = await enrollInCourse(courseId, 'john_doe');
+      alert(result);
       loadCourses();
     } catch (error) {
       alert('Error enrolling in course');
@@ -30,34 +31,39 @@ function CourseList() {
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Available Courses</h2>
-      {courses.map(course => (
-        <div key={course.id} style={{ border: '1px solid #ccc', padding: '1rem', margin: '1rem 0' }}>
-          <h3>{course.title}</h3>
-          <p>{course.description}</p>
-          <div>
-            <button 
-              onClick={() => handleEnroll(course.id)}
-              style={{ marginRight: '0.5rem', padding: '0.5rem', backgroundColor: '#28a745', color: 'white', border: 'none' }}
-            >
-              Enroll
-            </button>
-            <button 
-              onClick={() => navigate(`/progress/${course.id}`)}
-              style={{ marginRight: '0.5rem', padding: '0.5rem', backgroundColor: '#17a2b8', color: 'white', border: 'none' }}
-            >
-              Progress
-            </button>
-            <button 
-              onClick={() => navigate(`/quiz/${course.id}`)}
-              style={{ padding: '0.5rem', backgroundColor: '#ffc107', color: 'black', border: 'none' }}
-            >
-              Take Quiz
-            </button>
+    <div className="container">
+      <h2 className="page-title">📚 Available Courses</h2>
+      <div className="course-grid">
+        {Array.isArray(courses) && courses.map(course => (
+          <div key={course.id} className="course-card">
+            <h3>🎯 {course.name}</h3>
+            <p>{course.description}</p>
+            <div className="button-group">
+              <button 
+                onClick={() => handleEnroll(course.id)}
+                className="btn btn-success"
+              >
+                🚀 Enroll
+              </button>
+              <button 
+                onClick={() => navigate(`/progress/${course.id}`)}
+                className="btn btn-info"
+              >
+                📈 Progress
+              </button>
+              <button 
+                onClick={() => navigate(`/quiz/${course.id}`)}
+                className="btn btn-warning"
+              >
+                🧠 Take Quiz
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+        {!Array.isArray(courses) || courses.length === 0 && (
+          <p>No courses available.</p>
+        )}
+      </div>
     </div>
   );
 }

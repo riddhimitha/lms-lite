@@ -6,11 +6,12 @@ import CourseList from './components/CourseList';
 import CourseForm from './components/CourseForm';
 import ProgressTracker from './components/ProgressTracker';
 import QuizPage from './components/QuizPage';
+import './App.css';
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="app">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
